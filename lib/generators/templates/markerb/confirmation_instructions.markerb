@@ -1,4 +1,4 @@
-Welcome <%= @email %>!
+Welcome <%= @resource.send(@resource.class.authentication_keys.first) %>!
 
 You can confirm your account through the link below:
 
