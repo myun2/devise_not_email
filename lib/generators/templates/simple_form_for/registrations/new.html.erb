@@ -4,7 +4,9 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
+    <%- resource.class.authentication_keys.each_with_index do |authentication_key, i| %>
+      <%= f.input authentication_key, required: true, autofocus: i == 0 %>
+    <% end %>
     <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length) %>
     <%= f.input :password_confirmation, required: true %>
   </div>
