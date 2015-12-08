@@ -4,8 +4,8 @@
   <%= devise_error_messages! %>
 
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.label resource.class.authentication_keys.first %><br />
+    <%= f.email_field resource.class.authentication_keys.first, autofocus: true %>
   </div>
 
   <div class="actions">

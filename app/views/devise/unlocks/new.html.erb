@@ -4,8 +4,12 @@
   <%= devise_error_messages! %>
 
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.label resource.class.authentication_keys.first %><br />
+    <% if authentication_key.to_sym == :email %>
+      <%= f.email_field resource.authentication_keys.first, autofocus: true %>
+    <% else %>
+      <%= f.text_field resource.authentication_keys.first, autofocus: true %>
+    <% end %>
   </div>
 
   <div class="actions">

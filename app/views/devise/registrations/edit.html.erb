@@ -3,10 +3,16 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= devise_error_messages! %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
+  <%- resource.class.authentication_keys.each_with_index do |authentication_key, i| %>
+    <div class="field">
+      <%= f.label authentication_key %><br />
+      <% if authentication_key.to_sym == :email %>
+        <%= f.email_field authentication_key, autofocus: i == 0 %>
+      <% else %>
+        <%= f.text_field authentication_key, autofocus: i == 0 %>
+      <% end %>
+    </div>
+  <% end %>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
