@@ -27,8 +27,10 @@ module Devise
 
         base.class_eval do
           authentication_keys.each do |authentication_key|
-            validates_presence_of   authentication_key,
-              if: "#{authentication_key}_required?".to_sym
+            if respond_to? "#{authentication_key}_required?"
+              validates_presence_of   authentication_key,
+                if: "#{authentication_key}_required?".to_sym
+            end
 
             validates_uniqueness_of authentication_key,
               allow_blank: true, if: "#{authentication_key}_changed?".to_sym
