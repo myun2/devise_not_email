@@ -26,9 +26,19 @@ module Devise
         assert_validations_api!(base)
 
         base.class_eval do
-          validates_presence_of   :email, if: :email_required?
-          validates_uniqueness_of :email, allow_blank: true, if: :email_changed?
-          validates_format_of     :email, with: email_regexp, allow_blank: true, if: :email_changed?
+          authentication_keys.each do |authentication_key|
+            validates_presence_of   authentication_key,
+              if: "#{authentication_key}_required?".to_sym
+
+            validates_uniqueness_of authentication_key,
+              allow_blank: true, if: "#{authentication_key}_changed?".to_sym
+
+            if respond_to? "#{authentication_key}_regexp"
+              validates_format_of     authentication_key,
+                with: send("#{authentication_key}_regexp"), allow_blank: true,
+                if: "#{authentication_key}_changed?".to_sym
+            end
+          end
 
           validates_presence_of     :password, if: :password_required?
           validates_confirmation_of :password, if: :password_required?
@@ -52,10 +62,6 @@ module Devise
       # or confirmation are being set somewhere.
       def password_required?
         !persisted? || !password.nil? || !password_confirmation.nil?
-      end
-
-      def email_required?
-        true
       end
 
       module ClassMethods
